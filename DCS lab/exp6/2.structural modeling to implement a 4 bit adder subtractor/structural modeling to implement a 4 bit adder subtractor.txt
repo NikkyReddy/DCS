@@ -1,0 +1,67 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    23:46:59 06/02/2015 
+-- Design Name: 
+-- Module Name:    addsub - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity addsub is
+    Port ( a : in  STD_LOGIC_VECTOR (3 downto 0);
+           b : in  STD_LOGIC_VECTOR (3 downto 0);
+           M : in  STD_LOGIC;
+           sum : out  STD_LOGIC_VECTOR (3 downto 0);
+           cout : out  STD_LOGIC);
+end addsub;
+
+architecture Behavioral of addsub is
+
+component fulladd is
+Port ( a : in  STD_LOGIC;
+           b : in  STD_LOGIC;
+           cin : in  STD_LOGIC;
+           sum : out  STD_LOGIC;
+           carry : out  STD_LOGIC);
+end component;
+
+signal x : std_logic_vector (2 downto 0);
+signal y : std_logic_vector (3 downto 0);
+
+signal z: std_logic;
+begin         
+    
+     	 y(0) <= b(0) xor (M );
+    	 y(1) <= b(1) xor (M );
+	 y(2) <= b(2) xor (M );
+	 y(3) <= b(3) xor (M );
+    
+    ntr : fulladd port map (a=>a(0),b=>y(0),cin=>M,sum=>sum(0),carry=>x(0));
+    anr : fulladd port map (a=>a(1),b=>y(1),cin=>x(0),sum=>sum(1),carry=>x(1));
+    lnm : fulladd port map (a=>a(2),b=>y(2),cin=>x(1),sum=>sum(2),carry=>x(2));
+    pvr : fulladd port map (a=>a(3),b=>y(3),cin=>x(2),sum=>sum(3),carry=>cout);
+
+end Behavioral;
+

@@ -1,0 +1,74 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    23:14:45 06/05/2015 
+-- Design Name: 
+-- Module Name:    upcounter - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity upcounter is
+    Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+	   red,yellow,green:out std_logic:='0';
+           q : inout  STD_LOGIC_VECTOR (0 to 3));
+end upcounter;
+
+architecture Behavioral of upcounter is
+
+component jkflipflop1 is
+Port ( j : in  STD_LOGIC;
+           k : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           rst : in STD_LOGIC;
+           q : inout  STD_LOGIC;
+           qbar : inout  STD_LOGIC);
+end component;
+
+component andgate is 
+port(a,b:in std_logic;
+      c: out std_logic);
+end component;
+
+component junk is
+Port ( z : inout  STD_LOGIC;
+           q : inout  STD_LOGIC_VECTOR (0 to 3));
+end component;
+signal x,y,z,r,h:std_logic;
+begin
+r<= (q(0) and (not q(1)) and q(2) and q(3));
+h<= (r or rst);
+pvr: jkflipflop1 port map(j=>'1',k=>'1',clk=>clk,rst=>h,q=>q(3));
+prr: jkflipflop1 port map(j=>q(3),k=>q(3),clk=>clk,rst=>h,q=>q(2));
+arb: andgate port map(a=>q(3),b=>q(2),c=>x);
+ntr: jkflipflop1 port map(j=>x,k=>x,clk=>clk,rst=>h,q=>q(1));
+anr: andgate port map(a=>x,b=>q(1),c=>y);
+ppk: jkflipflop1 port map(j=>y,k=>y,clk=>clk,rst=>h,q=>q(0));
+
+yellow<= ((not q(0)) and (not q(1)) and (not q(2)) and (not q(3)));
+green<= (((not q(0)) and q(1) and (not q(2)) and (not q(3))) or (not q(0) and (not q(1))  and q(3)) or (not q(0) and (not q(1))  and q(2)));
+red<=  q(0) or (q(1) and q(3)) or (q(1) and q(2));
+end Behavioral;
+

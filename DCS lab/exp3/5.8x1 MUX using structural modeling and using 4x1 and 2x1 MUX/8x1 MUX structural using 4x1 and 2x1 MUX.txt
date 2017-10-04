@@ -1,0 +1,59 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    23:50:55 05/30/2015 
+-- Design Name: 
+-- Module Name:    eightbyone - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity eightbyone is
+    Port ( d : in  STD_LOGIC_VECTOR (7 downto 0);
+           s : in  STD_LOGIC_VECTOR (2 downto 0);
+           z : out  STD_LOGIC);
+end eightbyone;
+
+architecture Behavioral of eightbyone is
+
+
+component fourbyone is
+Port ( d : in  STD_LOGIC_VECTOR (3 downto 0);
+           s : in  STD_LOGIC_VECTOR (1 downto 0);
+           z : out  STD_LOGIC);
+end component;
+
+component twobyone is
+    Port ( d : in  STD_LOGIC_VECTOR (1 downto 0);
+           s : in  STD_LOGIC;
+           z : out  STD_LOGIC);
+end component;
+signal a,b: std_logic;
+begin
+pvr:fourbyone port map(d(0)=>d(0),d(1)=>d(1),d(2)=>d(2),d(3)=>d(3),s(0)=>s(0),s(1)=>s(1),z=>a);
+prr:fourbyone port map(d(0)=>d(4),d(1)=>d(5),d(2)=>d(6),d(3)=>d(7),s(0)=>s(0),s(1)=>s(1),z=>b);
+arb:twobyone port map(d(0)=>a,d(1)=>b,s=>s(2),z=>z);
+
+end Behavioral;
+

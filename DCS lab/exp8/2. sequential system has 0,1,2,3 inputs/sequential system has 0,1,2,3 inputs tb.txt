@@ -1,0 +1,170 @@
+--------------------------------------------------------------------------------
+-- Copyright (c) 1995-2003 Xilinx, Inc.
+-- All Right Reserved.
+--------------------------------------------------------------------------------
+--   ____  ____ 
+--  /   /\/   / 
+-- /___/  \  /    Vendor: Xilinx 
+-- \   \   \/     Version : 8.1i
+--  \   \         Application : ISE
+--  /   /         Filename : mooretest.vhw
+-- /___/   /\     Timestamp : Tue Jun 09 22:22:37 2015
+-- \   \  /  \ 
+--  \___\/\___\ 
+--
+--Command: 
+--Design Name: mooretest
+--Device: Xilinx
+--
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_TEXTIO.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE STD.TEXTIO.ALL;
+
+ENTITY mooretest IS
+END mooretest;
+
+ARCHITECTURE testbench_arch OF mooretest IS
+    FILE RESULTS: TEXT OPEN WRITE_MODE IS "results.txt";
+
+    COMPONENT moore_4s
+        PORT (
+            clk : In std_logic;
+            data_in : In std_logic_vector (1 DownTo 0);
+            reset : In std_logic;
+            z : Out std_logic
+        );
+    END COMPONENT;
+
+    SIGNAL clk : std_logic := '0';
+    SIGNAL data_in : std_logic_vector (1 DownTo 0) := "00";
+    SIGNAL reset : std_logic := '0';
+    SIGNAL z : std_logic := '0';
+
+    SHARED VARIABLE TX_ERROR : INTEGER := 0;
+    SHARED VARIABLE TX_OUT : LINE;
+
+    constant PERIOD : time := 100 ns;
+    constant DUTY_CYCLE : real := 0.5;
+    constant OFFSET : time := 0 ns;
+
+    BEGIN
+        UUT : moore_4s
+        PORT MAP (
+            clk => clk,
+            data_in => data_in,
+            reset => reset,
+            z => z
+        );
+
+        PROCESS    -- clock process for clk
+        BEGIN
+            WAIT for OFFSET;
+            CLOCK_LOOP : LOOP
+                clk <= '0';
+                WAIT FOR (PERIOD - (PERIOD * DUTY_CYCLE));
+                clk <= '1';
+                WAIT FOR (PERIOD * DUTY_CYCLE);
+            END LOOP CLOCK_LOOP;
+        END PROCESS;
+
+        PROCESS
+            PROCEDURE CHECK_z(
+                next_z : std_logic;
+                TX_TIME : INTEGER
+            ) IS
+                VARIABLE TX_STR : String(1 to 4096);
+                VARIABLE TX_LOC : LINE;
+                BEGIN
+                IF (z /= next_z) THEN
+                    STD.TEXTIO.write(TX_LOC, string'("Error at time="));
+                    STD.TEXTIO.write(TX_LOC, TX_TIME);
+                    STD.TEXTIO.write(TX_LOC, string'("ns z="));
+                    IEEE.STD_LOGIC_TEXTIO.write(TX_LOC, z);
+                    STD.TEXTIO.write(TX_LOC, string'(", Expected = "));
+                    IEEE.STD_LOGIC_TEXTIO.write(TX_LOC, next_z);
+                    STD.TEXTIO.write(TX_LOC, string'(" "));
+                    TX_STR(TX_LOC.all'range) := TX_LOC.all;
+                    STD.TEXTIO.writeline(RESULTS, TX_LOC);
+                    STD.TEXTIO.Deallocate(TX_LOC);
+                    ASSERT (FALSE) REPORT TX_STR SEVERITY ERROR;
+                    TX_ERROR := TX_ERROR + 1;
+                END IF;
+            END;
+            BEGIN
+                -- -------------  Current Time:  35ns
+                WAIT FOR 35 ns;
+                reset <= '1';
+                -- -------------------------------------
+                -- -------------  Current Time:  135ns
+                WAIT FOR 100 ns;
+                reset <= '0';
+                data_in <= "10";
+                -- -------------------------------------
+                -- -------------  Current Time:  335ns
+                WAIT FOR 200 ns;
+                data_in <= "01";
+                -- -------------------------------------
+                -- -------------  Current Time:  435ns
+                WAIT FOR 100 ns;
+                data_in <= "00";
+                -- -------------------------------------
+                -- -------------  Current Time:  635ns
+                WAIT FOR 200 ns;
+                data_in <= "01";
+                -- -------------------------------------
+                -- -------------  Current Time:  935ns
+                WAIT FOR 300 ns;
+                reset <= '1';
+                data_in <= "10";
+                -- -------------------------------------
+                -- -------------  Current Time:  1035ns
+                WAIT FOR 100 ns;
+                reset <= '0';
+                -- -------------------------------------
+                -- -------------  Current Time:  1135ns
+                WAIT FOR 100 ns;
+                data_in <= "01";
+                -- -------------------------------------
+                -- -------------  Current Time:  1435ns
+                WAIT FOR 300 ns;
+                data_in <= "10";
+                -- -------------------------------------
+                -- -------------  Current Time:  1535ns
+                WAIT FOR 100 ns;
+                data_in <= "00";
+                -- -------------------------------------
+                -- -------------  Current Time:  1635ns
+                WAIT FOR 100 ns;
+                data_in <= "01";
+                -- -------------------------------------
+                -- -------------  Current Time:  1835ns
+                WAIT FOR 200 ns;
+                data_in <= "10";
+                -- -------------------------------------
+                -- -------------  Current Time:  1935ns
+                WAIT FOR 100 ns;
+                data_in <= "00";
+                -- -------------------------------------
+                WAIT FOR 165 ns;
+
+                IF (TX_ERROR = 0) THEN
+                    STD.TEXTIO.write(TX_OUT, string'("No errors or warnings"));
+                    STD.TEXTIO.writeline(RESULTS, TX_OUT);
+                    ASSERT (FALSE) REPORT
+                      "Simulation successful (not a failure).  No problems detected."
+                      SEVERITY FAILURE;
+                ELSE
+                    STD.TEXTIO.write(TX_OUT, TX_ERROR);
+                    STD.TEXTIO.write(TX_OUT,
+                        string'(" errors found in simulation"));
+                    STD.TEXTIO.writeline(RESULTS, TX_OUT);
+                    ASSERT (FALSE) REPORT "Errors found during simulation"
+                         SEVERITY FAILURE;
+                END IF;
+            END PROCESS;
+
+    END testbench_arch;

@@ -1,0 +1,59 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    14:07:32 05/13/2015 
+-- Design Name: 
+-- Module Name:    halfadd_behavrl - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+---- Uncomment the following library declaration if instantiating
+---- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity halfadd_behavrl is
+    Port ( a : in  STD_LOGIC;
+           b : in  STD_LOGIC;
+           sum : out  STD_LOGIC;
+           carry : out  STD_LOGIC);
+end halfadd_behavrl;
+
+architecture Behavioral of halfadd_behavrl is
+
+begin
+process(a,b)
+begin
+if a='1' and b='1' then
+	sum   <= '0';
+	carry <= '1';
+elsif a='1' and b='0' then
+	sum   <= '1';
+	carry <= '0';
+elsif a='0' and b='1' then
+	sum   <= '1';
+	carry <= '0';
+else 
+        sum   <= '0';
+	carry <= '0';
+
+end if;
+end process;
+
+end Behavioral;
+

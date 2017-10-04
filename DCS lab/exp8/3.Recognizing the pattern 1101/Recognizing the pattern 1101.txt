@@ -1,0 +1,95 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    19:58:19 06/05/2015 
+-- Design Name: 
+-- Module Name:    recognizingthepatter - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity recognizingthepatter is
+    Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           input : in  STD_LOGIC;
+           output : out  STD_LOGIC);
+end recognizingthepatter;
+
+architecture Behavioral of recognizingthepatter is
+type state_type is (s0,s1,s2,s3);
+signal present_s,next_s: state_type;
+begin
+process(clk,rst)
+begin
+if rst='1' then
+present_s<=s0;
+elsif(rising_edge(clk)) then
+present_s <= next_s;
+end if;
+end process;
+
+
+process(present_s,input)
+begin
+case present_s is
+when s0 =>        --when current state is "s0"
+     if(input ='1') then
+      output <= '0';
+      next_s <= s1;
+	  else
+	  output <= '0';
+      next_s <= s0;
+	 end if;
+when s1 =>        --when current state is "s1"
+    if(input ='1') then
+      output <= '0';
+      next_s <= s2;
+    else
+      output <= '0';
+      next_s <= s0;
+    end if;
+
+when s2 =>       --when current state is "s2"
+    if(input ='0') then
+      output <= '0';
+      next_s <= s3;
+    else
+      output <= '0';
+      next_s <= s2;
+    end if;
+
+
+ when s3 =>         --when current state is "s3"
+    if(input ='1') then
+      output <= '1';
+      next_s <= s1;
+    else
+      output <= '0';
+      next_s <= s3;
+    end if;
+  end case;
+end process;
+
+end Behavioral;
+

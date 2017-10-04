@@ -1,0 +1,57 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    10:23:39 06/03/2015 
+-- Design Name: 
+-- Module Name:    implementafunc - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity implementafunc is
+    Port ( en : in  STD_LOGIC;
+           a : in  STD_LOGIC_VECTOR (2 downto 0);
+           d : inout  STD_LOGIC_VECTOR (7 downto 0);
+           z : out  STD_LOGIC);
+end implementafunc;
+
+architecture Behavioral of implementafunc is
+
+component twotofour is
+Port ( enable : in  STD_LOGIC;
+           a : in  STD_LOGIC_VECTOR (1 downto 0);
+           d : out  STD_LOGIC_VECTOR (3 downto 0));
+end component;
+signal x,y,m,q,k,l,h,g: STD_LOGIC;
+begin
+pvr: twotofour port map(a(1)=>a(2),a(0)=>'0',enable=>en,d(3)=>x,d(2)=>y,d(1)=>m,d(0)=>q);
+prr: twotofour port map(a(1)=>a(1),a(0)=>a(0),enable=>x,d(3)=>d(7),d(2)=>d(6),d(1)=>d(5),d(0)=>d(4));
+arb: twotofour port map(a(1)=>a(1),a(0)=>a(0),enable=>m,d(3)=>d(3),d(2)=>d(2),d(1)=>d(1),d(0)=>d(0));
+
+z<=d(1) or d(2) or d(5) or d(7);
+
+
+
+end Behavioral;
+

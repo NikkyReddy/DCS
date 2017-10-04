@@ -1,0 +1,52 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    20:24:21 06/01/2015 
+-- Design Name: 
+-- Module Name:    threetoeightdataflow - Dataflow 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity threetoeightdataflow is
+    Port ( en : in  STD_LOGIC;
+           din : in  STD_LOGIC_VECTOR (2 downto 0);
+           dout : out  STD_LOGIC_VECTOR (7 downto 0));
+end threetoeightdataflow;
+
+architecture Dataflow of threetoeightdataflow is
+
+begin
+
+dout <="10000000" when( en='1' and  din="000") else
+       "01000000" when( en='1' and din="001") else
+       "00100000" when( en='1' and din="010") else
+		 "00010000" when(en='1' and din="011") else
+		 "00001000" when(en='1' and  din="100") else
+		 "00000100" when(en='1' and din="101") else 
+		 "00000010" when(en='1' and din="110") else
+		 "00000001" when(en='1' and din="111") else
+		 "00000000";
+end Dataflow;
+

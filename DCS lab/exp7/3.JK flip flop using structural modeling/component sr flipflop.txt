@@ -1,0 +1,79 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    13:37:28 06/03/2015 
+-- Design Name: 
+-- Module Name:    srflipflop - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity srflipflop is
+    Port ( r : in  STD_LOGIC;
+           s : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+           reset : in  STD_LOGIC;
+           q : out  STD_LOGIC;
+           qbar : out  STD_LOGIC);
+end srflipflop;
+
+architecture Behavioral of srflipflop is
+signal qtemp,qbartemp:std_logic:='0';
+begin
+
+q<=qtemp;
+qbar<=qbartemp;
+
+process(clk,reset)
+
+begin
+
+if(reset = '1') then          
+ qtemp <= '0';
+ qbartemp <= '1';
+
+elsif( rising_edge(clk) ) then
+
+if(s='0' and r='0') then       --No change in the output
+ NULL;
+
+elsif(s='0' and r='1') then    --Set the output.
+ qtemp <= '0';
+ qbartemp <= '1';
+
+elsif(s='1' and r='0') then    --Reset the output.
+ qtemp <= '1';
+ qbartemp <= '0';
+
+else
+qtemp <= 'X';
+qbartemp <= 'X';
+
+end if;
+end if;
+end process;
+
+
+end Behavioral;
+

@@ -1,0 +1,103 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    23:48:02 06/09/2015 
+-- Design Name: 
+-- Module Name:    moore_4s - rtl 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity moore_4s is
+    Port ( clk : in  STD_LOGIC;
+           data_in : in  STD_LOGIC_VECTOR (1 downto 0);
+           reset : in  STD_LOGIC;
+           z : out  STD_LOGIC);
+end moore_4s;
+
+architecture rtl of moore_4s is
+
+type state_type is (s_odd,s_even);
+signal state1,state2 : state_type;
+signal ones,twos:std_logic;
+begin
+-- Logic to advance to the next state
+z<=ones and twos;
+proc1: process (clk, reset)
+begin
+	if reset = '1' then
+		state1 <= s_even;
+		state2 <= s_even;
+	elsif (rising_edge(clk)) then
+		case state1 is
+			when s_even=>
+				if data_in = "01" then
+					state1 <= s_odd;
+				else
+					state1 <= s_even;
+				end if;	
+			when s_odd=>
+				if data_in = "01" then
+					state1 <= s_even;
+				else
+					state1 <= s_odd;
+				end if;
+		end case;
+		case state2 is
+			when s_even=>
+				if data_in = "10" then
+					state2 <= s_odd;
+				else
+					state2 <= s_even;
+				end if;
+			when s_odd=>
+				if data_in = "10" then
+					state2 <= s_even;
+				else
+					state2 <= s_odd;
+				end if;
+		end case;
+
+end if;
+end process;
+
+-- Output depends solely on the current state
+
+process (state1,state2)
+begin
+case state1 is
+when s_odd =>
+ones <= '1';
+when s_even => 
+ones<= '0';
+end case;
+
+case state2 is
+when s_odd =>
+twos <= '0';
+when s_even => 
+twos<= '1';
+end case;
+end process;
+end rtl;

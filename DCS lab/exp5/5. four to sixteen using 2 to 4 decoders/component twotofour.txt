@@ -1,0 +1,56 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    10:35:30 06/06/2015 
+-- Design Name: 
+-- Module Name:    twotofour - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity twotofour is
+    Port ( enable : in  STD_LOGIC;
+           a : in  STD_LOGIC_VECTOR (1 downto 0);
+           d : out  STD_LOGIC_VECTOR (3 downto 0));
+end twotofour;
+
+architecture Behavioral of twotofour is
+
+begin
+process(enable,a)
+begin
+if enable='1' and a="00"  then
+d<="1000";
+elsif enable='1' and a="01"  then
+d<="0100";
+elsif enable='1' and a="10"  then
+d<="0010";
+elsif enable='1' and a="11"  then
+d<="0001";
+else
+d<="0000";
+end if;
+end process;
+end Behavioral;
+

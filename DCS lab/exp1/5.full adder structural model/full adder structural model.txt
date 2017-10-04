@@ -1,0 +1,54 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    12:21:41 05/15/2015 
+-- Design Name: 
+-- Module Name:    fadder - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity fadder is
+    Port ( a : in  STD_LOGIC;
+           b : in  STD_LOGIC;
+           c_in : in  STD_LOGIC;
+           s : out  STD_LOGIC;
+           c_out : out  STD_LOGIC);
+end fadder;
+
+architecture Behavioral of fadder is
+
+component hadder is
+port(a,b: in std_logic;
+     s,c: out std_logic);
+end component;
+signal s1,c1,c2: std_logic;
+
+begin
+ha1: hadder port map(a,b,s1,c1);
+ha2: hadder port map(c_in,s1,s,c2);
+c_out<= c1 or c2;
+
+end Behavioral;
+

@@ -1,0 +1,107 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    12:19:16 06/07/2015 
+-- Design Name: 
+-- Module Name:    lastexp - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity lastexp is
+    Port ( x : in  STD_LOGIC_VECTOR (3 downto 0);
+           d : out  STD_LOGIC_VECTOR (3 downto 0));
+end lastexp;
+
+architecture Behavioral of lastexp is
+
+signal p:STD_LOGIC_VECTOR (14 downto 0);
+signal m:STD_LOGIC_VECTOR (6 downto 0);
+signal g:STD_LOGIC_VECTOR (2 downto 0);
+component twotoonbmux is
+Port ( b : in  STD_LOGIC;
+           a : in  STD_LOGIC;
+           s : in  STD_LOGIC;
+           z : out  STD_LOGIC);
+end component;
+
+begin
+
+process(x)
+variable K : STD_LOGIC_VECTOR(3 downto 0);
+begin
+K:=x;
+case K is
+when "0000" =>p<="000000000000000";
+when "0001" =>p<="000000000000001";
+when "0010" =>p<="000000000000011";
+when "0011" =>p<="000000000000111";
+when "0100" =>p<="000000000001111";
+when "0101" =>p<="000000000011111";
+when "0110" =>p<="000000000111111";
+when "0111" =>p<="000000001111111";
+when "1000" =>p<="000000011111111";
+when "1001" =>p<="000000111111111";
+when "1010" =>p<="000001111111111";
+when "1011" =>p<="000011111111111";
+when "1100" =>p<="000111111111111";
+when "1101" =>p<="001111111111111";
+when "1110" =>p<="011111111111111";
+when "1111" =>p<="111111111111111";
+when others=>p<="XXXXXXXXXXXXXXX";
+
+end case;
+end process;
+
+pvr: twotoonbmux port map(p(6),p(14),p(7),m(6));
+
+prr:twotoonbmux port map(p(5),p(13),p(7),m(5));
+
+ppk:twotoonbmux port map(p(4),p(12),p(7),m(4));
+
+ntr:twotoonbmux port map(p(3),p(11),p(7),m(3));
+
+anr:twotoonbmux port map(p(2),p(10),p(7),m(2));
+
+nbk:twotoonbmux port map(p(1),p(9),p(7),m(1));
+
+arb:twotoonbmux port map(p(0),p(8),p(7),m(0));
+
+legend:twotoonbmux port map(m(2),m(6),m(3),g(2));
+
+simha:twotoonbmux port map(m(1),m(5),m(3),g(1));
+
+aadi:twotoonbmux port map(m(0),m(4),m(3),g(0));
+
+samba:twotoonbmux port map(g(0),g(2),g(1),d(0));
+
+d(3)<=p(7);
+d(2)<=m(3);
+d(1)<=g(1);
+
+
+
+
+end Behavioral;
+

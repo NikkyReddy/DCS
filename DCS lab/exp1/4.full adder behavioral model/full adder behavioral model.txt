@@ -1,0 +1,70 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    15:26:13 05/13/2015 
+-- Design Name: 
+-- Module Name:    fulladd_behav - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+---- Uncomment the following library declaration if instantiating
+---- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity fulladd_behav is
+    Port ( a : in  STD_LOGIC;
+           b : in  STD_LOGIC;
+           c_in : in  STD_LOGIC;
+           sum : out  STD_LOGIC;
+           c_out : out  STD_LOGIC);
+end fulladd_behav;
+
+architecture Behavioral of fulladd_behav is
+
+begin
+process(a,b,c_in)
+begin
+if a='0' and b='0' and c_in='0' then
+	sum  <= '0';
+	c_out<= '0';
+elsif a='0' and b='0' and c_in='1' then
+	sum  <= '1';
+	c_out<= '0';
+elsif a='0' and b='1' and c_in='0' then
+	sum  <= '1';
+	c_out<= '0';
+elsif a='0' and b='1' and c_in='1' then
+	sum  <= '0';
+	c_out<= '1';
+elsif a='1' and b='0' and c_in='0' then
+	sum  <= '1';
+	c_out<= '0';
+elsif a='1' and b='0' and c_in='1' then
+	sum  <= '0';
+	c_out<= '1';
+elsif a='1' and b='1' and c_in='0' then
+	sum  <= '0';
+	c_out<= '1';
+else
+	sum  <= '1';
+	c_out<= '1';
+end if;
+end process;
+end Behavioral;
+

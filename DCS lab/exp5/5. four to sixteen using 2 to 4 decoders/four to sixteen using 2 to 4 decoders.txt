@@ -1,0 +1,58 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    10:38:32 06/06/2015 
+-- Design Name: 
+-- Module Name:    fourtosixteen - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity fourtosixteen is
+    Port ( en : in  STD_LOGIC;
+           a : in  STD_LOGIC_VECTOR (3 downto 0);
+           d : out  STD_LOGIC_VECTOR (15 downto 0));
+end fourtosixteen;
+
+architecture Behavioral of fourtosixteen is
+
+component twotofour is
+ Port ( enable : in  STD_LOGIC;
+           a : in  STD_LOGIC_VECTOR (1 downto 0);
+           d : out  STD_LOGIC_VECTOR (3 downto 0));
+end component;
+
+signal b,c,e,f:std_logic;
+signal z: std_logic:='1';
+
+begin
+pvr: twotofour port map(a(1)=>a(3),a(0)=>a(2),enable=>en,d(3)=>b,d(2)=>c,d(1)=>e,d(0)=>f);
+prr: twotofour port map(a(1)=>a(1),a(0)=>a(0),enable=>b,d(3)=>d(15),d(2)=>d(14),d(1)=>d(13),d(0)=>d(12));
+ppk: twotofour port map(a(1)=>a(1),a(0)=>a(0),enable=>c,d(3)=>d(11),d(2)=>d(10),d(1)=>d(9),d(0)=>d(8));
+ntr: twotofour port map(a(1)=>a(1),a(0)=>a(0),enable=>e,d(3)=>d(7),d(2)=>d(6),d(1)=>d(5),d(0)=>d(4));
+arb: twotofour port map(a(1)=>a(1),a(0)=>a(0),enable=>f,d(3)=>d(3),d(2)=>d(2),d(1)=>d(1),d(0)=>d(0));
+
+
+end Behavioral;
+
